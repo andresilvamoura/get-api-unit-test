@@ -16,7 +16,7 @@ export class PersonagemComponent implements OnInit {
     this.getPerson()
   }
 
-  getPerson(){
+  getPerson() {
     this.service.getPerson()
       .subscribe(res => {
         this.person = res

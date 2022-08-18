@@ -5,17 +5,17 @@ import { Person } from '../models/person';
 import { Observable, Observer } from 'rxjs';
 import { PersonService } from './person.service';
 
-const person = {"name": "RICK", "image": "https://teste.com"}
+const person: Person = { "name": "RICK", "image": "https://teste.com" }
 
 function createResponse(body: { name: string; image: string; }) {
-  return Observable.create((observer: Observer<any>) => {
-      observer.next(body);
+  return new Observable((observer: Observer<any>) => {
+    observer.next(body);
   });
 }
 
 class MockHttp {
   get() {
-      return createResponse(person);
+    return createResponse(person);
   }
 }
 
@@ -26,11 +26,11 @@ describe('PersonService', () => {
   beforeEach(() => {
     const bed = TestBed.configureTestingModule({
       providers: [
-        {provide: HttpClient, useClass: MockHttp},
+        { provide: HttpClient, useClass: MockHttp },
         PersonService
       ]
     });
-    http = bed.get(HttpClient);
+    http = bed.inject(HttpClient);
     service = TestBed.inject(PersonService);
   });
 
@@ -38,14 +38,14 @@ describe('PersonService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('deve retonar o person' , ()=> {
-    spyOn(http, 'get').and.returnValue(createResponse(person));
+  it('deve retonar o person', () => {
+    // spyOn(http, 'get').and.returnValue(createResponse(person));
 
     service.getPerson()
       .subscribe((result) => {
         expect(result).toEqual(person)
         console.log('person:  ' + JSON.stringify(person));
-        console.log('result:  ' +  JSON.stringify(result));
+        console.log('result:  ' + JSON.stringify(result));
       })
   })
 });
